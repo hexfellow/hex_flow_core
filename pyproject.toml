@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools >= 61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hex_flow_core"
+version = "0.0.1-alpha.1"
+description = "HEXFELLOW hex-flow Core"
+readme = "README.md"
+license = "Apache-2.0"
+authors = [{ name = "Dong Zhaorui", email = "dzr159@gmail.com" }]
+maintainers = [
+  { name = "jecjune", email = "zejun.chen@hexfellow.com" },
+  { name = "Dong Zhaorui", email = "dzr159@gmail.com" },
+]
+keywords = ["hex", "flow", "core"]
+requires-python = ">=3.10"
+dependencies = [
+  "eclipse-zenoh>=1.9.0",
+  "envlog==1.0.0",
+  "hex_util_runtime>=0.0.0,<0.1.0",
+  "pyyaml>=6.0",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Operating System :: POSIX :: Linux",
+]
+
+
+[project.urls]
+Homepage = "https://github.com/hexfellow/hex_flow_core"
+Repository = "https://github.com/hexfellow/hex_flow_core.git"
+"Bug Tracker" = "https://github.com/hexfellow/hex_flow_core/issues"
+Documentation = "https://github.com/hexfellow/hex_flow_core/wiki"
