@@ -6,18 +6,15 @@
 # Date  : 2026-04-22
 ################################################################
 
-import os, time, traceback
+import time, traceback
 import numpy as np
 from hex_util_runtime import HexRate
+from hex_util_runtime import get_env_bool
 from hex_flow_core import NodeCallback
 
 
-def parse_env_bool(env_name: str, default: str = "false") -> bool:
-    return os.getenv(env_name, default).lower() in ["true", "1", "yes", "y"]
-
-
 def main():
-    log_flag = parse_env_bool("PRINT_LOG", "false")
+    log_flag = get_env_bool("PRINT_LOG")
     node = NodeCallback("test_pub_cmd")
     node.start()
     node.create_pub("test/cmd")

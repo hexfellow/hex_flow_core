@@ -21,7 +21,9 @@ config = LaunchConfig(
 nodes: dict[str, NodeConfig] = {}
 
 for i in range(8):
-    nodes[f"test_pub_cmd_{i}"] = NodeConfig(
+    node_name = f"test_pub_cmd_{i}"
+    nodes[node_name] = NodeConfig(
+        name=node_name,
         run_cmd=f"python {EXAMPLES_DIR}/test_pub_cmd.py",
         build_cmd="pip install -e ../hex_flow_core",
         required=True,
@@ -35,7 +37,9 @@ for i in range(8):
     )
 
 for i in range(6):
-    nodes[f"test_pub_img_{i}"] = NodeConfig(
+    node_name = f"test_pub_img_{i}"
+    nodes[node_name] = NodeConfig(
+        name=node_name,
         run_cmd=f"python {EXAMPLES_DIR}/test_pub_img.py",
         build_cmd="pip install -e ../hex_flow_core",
         required=True,
@@ -49,6 +53,7 @@ for i in range(6):
     )
 
 nodes["test_sub"] = NodeConfig(
+    name="test_sub",
     run_cmd=f"python {EXAMPLES_DIR}/test_sub.py",
     build_cmd="pip install -e ../hex_flow_core",
     required=True,
@@ -61,5 +66,5 @@ nodes["test_sub"] = NodeConfig(
     },
 )
 
-config.add(nodes)
-print(config.save())
+config.set_nodes(nodes)
+print(config.export())
