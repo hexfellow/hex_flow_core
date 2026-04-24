@@ -189,8 +189,8 @@ class TestLaunchConfigInit:
         lc_tui = LaunchConfig(enable_tui=True, log_to_file=True)
         path_no_tui = self._export_and_load(lc)
         path_tui = self._export_and_load(lc_tui)
-        assert path_no_tui["launcher"]["log-to-file"] is False
-        assert path_tui["launcher"]["log-to-file"] is True
+        assert path_no_tui["launcher"]["tui-log-to-file"] is False
+        assert path_tui["launcher"]["tui-log-to-file"] is True
 
     @staticmethod
     def _export_and_load(lc: LaunchConfig) -> dict:
@@ -311,7 +311,7 @@ class TestLaunchConfigExportImport:
 
     def test_from_yml_no_router_key(self, tmp_yml):
         data = {
-            "launcher": {"disable-tui": True, "log-to-file": False},
+            "launcher": {"disable-tui": True, "tui-log-to-file": False},
             "nodes": [{"name": "a", "run": "r", "required": True}],
         }
         path = tmp_yml(data)
@@ -319,7 +319,7 @@ class TestLaunchConfigExportImport:
         assert lc.get_node("a") is not None
 
     def test_from_yml_no_nodes_key(self, tmp_yml):
-        data = {"launcher": {"disable-tui": True, "log-to-file": False}}
+        data = {"launcher": {"disable-tui": True, "tui-log-to-file": False}}
         path = tmp_yml(data)
         lc = LaunchConfig.from_yml(path)
         assert lc.get_node_names() == []
@@ -330,7 +330,7 @@ class TestLaunchConfigExportImport:
         assert lc.get_node_names() == []
 
     def test_from_yml_custom_save_path(self, tmp_yml):
-        data = {"launcher": {"disable-tui": False, "log-to-file": False}}
+        data = {"launcher": {"disable-tui": False, "tui-log-to-file": False}}
         path = tmp_yml(data)
         lc = LaunchConfig.from_yml(path, save_path="/tmp/custom.yml")
         assert lc.get_path() == "/tmp/custom.yml"

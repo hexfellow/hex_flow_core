@@ -97,11 +97,13 @@ class LaunchConfig:
         local_only: bool = False,
         enable_tui: bool = False,
         log_to_file: bool = False,
+        clear_old: bool = True,
         save_path: str = "/tmp/hex_flow.launch.yml",
     ):
         self.__local_only = local_only
         self.__enable_tui = enable_tui
         self.__log_to_file = log_to_file and enable_tui
+        self.__clear_old = clear_old
         self.__node_map: dict[str, NodeConfig] = {}
         self.__save_path = save_path
 
@@ -147,7 +149,8 @@ class LaunchConfig:
             }
         data["launcher"] = {
             "disable-tui": not self.__enable_tui,
-            "log-to-file": self.__log_to_file,
+            "tui-log-to-file": self.__log_to_file,
+            "skip-killing-old-zenohd": not self.__clear_old,
         }
         if self.__node_map:
             data["nodes"] = [n.to_dict() for n in self.__node_map.values()]
@@ -176,7 +179,7 @@ class LaunchConfig:
         launch_config = LaunchConfig(
             local_only=local_only,
             enable_tui=not launcher.get("disable-tui", True),
-            log_to_file=launcher.get("log-to-file", False),
+            log_to_file=launcher.get("tui-log-to-file", False),
             save_path=path if save_path is None else save_path,
         )
         for node in data.get("nodes", []):
