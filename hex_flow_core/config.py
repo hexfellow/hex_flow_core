@@ -97,7 +97,7 @@ class LaunchConfig:
         local_only: bool = False,
         enable_tui: bool = False,
         log_to_file: bool = False,
-        save_path: str = "/tmp/hex_flow_launch.yml",
+        save_path: str = "/tmp/hex_flow.launch.yml",
     ):
         self.__local_only = local_only
         self.__enable_tui = enable_tui

@@ -13,9 +13,9 @@ EXAMPLES_DIR = Path(__file__).resolve().parent
 
 config = LaunchConfig(
     local_only=True,
-    enable_tui=False,
+    enable_tui=True,
     log_to_file=True,
-    save_path="/tmp/my_hex_flow_launch.yml",
+    save_path="/tmp/my_hex_flow.launch.yml",
 )
 
 nodes: dict[str, NodeConfig] = {}

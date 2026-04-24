@@ -142,20 +142,20 @@ launch = LaunchConfig(
     local_only=True,
     enable_tui=False,
     log_to_file=True,
-    save_path="/tmp/my_launch.yml",
+    save_path="/tmp/my.launch.yml",
 )
 
 launch.set_node("cam", NodeConfig(run_cmd="python cam.py"))
 launch.set_node("ctrl", NodeConfig(run_cmd="python ctrl.py"))
 
 path = launch.export()
-print(path)  # /tmp/my_launch.yml
+print(path)  # /tmp/my.launch.yml
 ```
 
 The exported YAML can be used with:
 
 ```bash
-hexflow run /tmp/my_launch.yml
+hexflow run /tmp/my.launch.yml
 ```
 
 # 💡 Example
@@ -165,7 +165,7 @@ We provide examples to test the installation. **After installation**, run:
 ```bash
 git clone https://github.com/hexfellow/hex_flow_core.git
 cd hex_flow_core
-hexflow run $(python examples/test_config.py)
+hexflow run examples/test.launch.py
 ```
 
 This launches 8 command publishers (~1000 Hz each), 6 image publishers (~50 Hz each), and 1 subscriber that validates payloads and logs throughput.
