@@ -81,6 +81,7 @@ class NodeConfig:
         if self.__build_cmd:
             d["build"] = self.__build_cmd
         d["required"] = self.__required
+        d["hidden"] = self.__hidden
         if self.__remap_dict:
             d["remap"] = dict(self.__remap_dict)
         if self.__env_dict:
