@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hex_flow_core"
-version = "0.0.1-alpha.5"
+version = "0.0.1-alpha.6"
 description = "HEXFELLOW hex-flow Core"
 readme = "README.md"
 license = "Apache-2.0"

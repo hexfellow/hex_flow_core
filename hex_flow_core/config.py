@@ -17,6 +17,7 @@ class NodeConfig:
         build_cmd: str = "",
         run_cmd: str = "",
         required: bool = True,
+        hidden: bool = False,
         remap_dict: dict[str, str] | None = None,
         env_dict: dict[str, str] | None = None,
     ):
@@ -24,6 +25,7 @@ class NodeConfig:
         self.__build_cmd = build_cmd
         self.__run_cmd = run_cmd
         self.__required = required
+        self.__hidden = hidden
         self.__remap_dict = remap_dict if remap_dict is not None else {}
         self.__env_dict = env_dict if env_dict is not None else {}
 
@@ -32,6 +34,9 @@ class NodeConfig:
 
     def get_required(self) -> bool:
         return self.__required
+
+    def get_hidden(self) -> bool:
+        return self.__hidden
 
     def get_remap_dict(self) -> dict[str, str]:
         return self.__remap_dict
@@ -44,6 +49,9 @@ class NodeConfig:
 
     def set_required(self, required: bool):
         self.__required = required
+
+    def set_hidden(self, hidden: bool):
+        self.__hidden = hidden
 
     def set_remap_dict(self, remap_dict: dict[str, str], update: bool = False):
         if update:
@@ -60,6 +68,7 @@ class NodeConfig:
     def update(self, other: "NodeConfig"):
         self.__name = other.__name
         self.__required = other.__required
+        self.__hidden = other.__hidden
         if other.__build_cmd:
             self.__build_cmd = other.__build_cmd
         if other.__run_cmd:
