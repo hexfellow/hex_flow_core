@@ -27,6 +27,7 @@ for i in range(8):
         run_cmd=f"python {EXAMPLES_DIR}/test_pub_cmd.py",
         build_cmd="pip install -e ../hex_flow_core",
         required=True,
+        hidden=True,
         remap_dict={
             "test/cmd": "test/cmd",
         },
@@ -43,6 +44,7 @@ for i in range(6):
         run_cmd=f"python {EXAMPLES_DIR}/test_pub_img.py",
         build_cmd="pip install -e ../hex_flow_core",
         required=True,
+        hidden=True,
         remap_dict={
             "test/img": "test/img",
         },

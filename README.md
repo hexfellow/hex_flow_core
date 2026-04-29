@@ -37,7 +37,7 @@
 ## Requirements
 
 - **Python** >= 3.10
-- **OS**: Ubuntu (or other Linux)
+- **OS**: Ubuntu (tested on 22.04)
 - **Core dependencies**:
   - `eclipse-zenoh` >= 1.9.0
   - `envlog` == 1.0.0
@@ -49,19 +49,37 @@
 For Ubuntu or any Debian-based system, install Zenoh and hex-flow CLI:
 
 ```bash
+sudo apt update
+sudo apt install -y curl gpg
+
 curl -L https://download.eclipse.org/zenoh/debian-repo/zenoh-public-key | sudo gpg --dearmor --yes --output /etc/apt/keyrings/zenoh-public-key.gpg
 echo "deb [signed-by=/etc/apt/keyrings/zenoh-public-key.gpg] https://download.eclipse.org/zenoh/debian-repo/ /" | sudo tee -a /etc/apt/sources.list > /dev/null
 sudo apt update
-sudo apt install zenoh curl
+sudo apt install -y zenoh
+
 curl -fsSL https://raw.githubusercontent.com/hexfellow/hex-flow/main/install.sh | sh
 ```
 
-For other systems, please install `zenohd` yourself, then run the install script.
+For other systems, please install `zenohd` yourself, then run the [install script](https://raw.githubusercontent.com/hexfellow/hex-flow/main/install.sh).
 
 ## Install `hex-flow-core` from PyPI
 
+You can install `hex-flow-core` from PyPI:
+
 ```bash
-pip install hex_flow_core
+uv pip install hex_flow_core
+```
+
+## Install `hex-flow-core` from source
+
+We provide a [venv.sh](venv.sh) script to create a virtual environment with all dependencies installed. However, you need to install uv first. For uv installation, please refer to `uv` official [installation guide](https://docs.astral.sh/uv/getting-started/installation/).
+
+Then you can use our [venv.sh](venv.sh) to create a virtual environment with all dependencies installed:
+
+```bash
+git clone https://github.com/hexfellow/hex_flow_core.git
+cd hex_flow_core
+./venv.sh
 ```
 
 # 📑 API
@@ -160,11 +178,15 @@ hexflow run /tmp/my.launch.yml
 
 # 💡 Example
 
-We provide examples to test the installation. **After installation**, run:
+**Examples are only available for users who install `hex-flow-core` from source code**. Follow the steps below to run the examples:
 
 ```bash
 git clone https://github.com/hexfellow/hex_flow_core.git
 cd hex_flow_core
+
+./venv.sh
+source .venv/bin/activate
+
 hexflow run examples/test.launch.py
 ```
 
