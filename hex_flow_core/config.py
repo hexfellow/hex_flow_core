@@ -94,7 +94,8 @@ class NodeConfig:
             name=data["name"],
             run_cmd=data["run"],
             build_cmd=data.get("build", ""),
-            required=data["required"],
+            required=data.get("required", True),
+            hidden=data.get("hidden", False),
             remap_dict=data.get("remap", {}),
             env_dict=data.get("env", {}),
         )

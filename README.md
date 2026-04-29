@@ -74,6 +74,10 @@ uv pip install hex_flow_core
 
 We provide a [venv.sh](venv.sh) script to create a virtual environment with all dependencies installed. However, you need to install uv first. For uv installation, please refer to `uv` official [installation guide](https://docs.astral.sh/uv/getting-started/installation/).
 
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
 Then you can use our [venv.sh](venv.sh) to create a virtual environment with all dependencies installed:
 
 ```bash
@@ -134,7 +138,17 @@ node.stop()
 
 ## `NodeConfig`
 
-Describes a single node for launch: name, build/run commands, required flag, topic remaps, and environment variables.
+Describes a single node for launch: name, build/run commands, required/hidden flags, topic remaps, and environment variables.
+
+| Parameter     | Type                  | Default | Description                                                     |
+| ------------- | --------------------- | ------- | --------------------------------------------------------------- |
+| `name`        | `str`                 | `""`    | Node identifier used in logs and launch files                   |
+| `run_cmd`     | `str`                 | `""`    | Command to run the node                                         |
+| `build_cmd`   | `str`                 | `""`    | Build command executed before running (empty = skip)            |
+| `required`    | `bool`                | `True`  | If `True`, the launcher marks the node as critical              |
+| `hidden`      | `bool`                | `False` | If `True`, hides the node from default UI displays / logs       |
+| `remap_dict`  | `dict[str, str]`      | `{}`    | Topic remapping: logical key → actual Zenoh key                 |
+| `env_dict`    | `dict[str, str]`      | `{}`    | Environment variables injected into the node process            |
 
 ```python
 from hex_flow_core import NodeConfig
@@ -144,6 +158,7 @@ cfg = NodeConfig(
     run_cmd="python cam_pub.py",
     build_cmd="pip install -e .",
     required=True,
+    hidden=False,
     remap_dict={"camera/rgb": "robot_a/camera/rgb"},
     env_dict={"RUST_LOG": "debug"},
 )
