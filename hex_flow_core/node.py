@@ -12,11 +12,12 @@ import zenoh
 from typing import Callable, Optional
 from collections import deque
 from hex_util_runtime import deque_helper
+from hex_util_msg.builder_basic import parse_hex_ts_ns
 
 
 class NodeCallback:
 
-    def __init__(self, name: str = "unknown"):
+    def __init__(self, name: str = "unknown", sub_tick: bool = True):
         self.__name = os.getenv("HEX_FLOW_NODE_NAME", name)
         self.__remap = json.loads(os.getenv("HEX_FLOW_REMAP", "{}"))
 
@@ -30,6 +31,9 @@ class NodeCallback:
         self.__pubs: dict[str, zenoh.Publisher] = {}
         self.__subs: list = []
         self.__working = False
+
+        self.__sub_tick = sub_tick
+        self.cur_ts_ns = 0
 
     def _remap(self, topic: str) -> str:
         return self.__remap.get(topic, topic)
@@ -48,6 +52,17 @@ class NodeCallback:
 
         self.__working = True
         self.info(f"node '{self.__name}' started")
+
+        if self.__sub_tick:
+            # init tick subscriber
+            tick_topic = self._remap("tick")
+            sub = self.__session.declare_subscriber(tick_topic,
+                                                    self.__tick_listener)
+            self.__subs.append(sub)
+
+    def __tick_listener(self, sample):
+        msg = parse_hex_ts_ns(sample.payload.to_bytes())
+        self.cur_ts_ns = msg["ts_ns"]
 
     def stop(self):
         if not self.__working:

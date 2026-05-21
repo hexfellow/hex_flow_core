@@ -19,6 +19,16 @@ config = LaunchConfig(
 )
 
 nodes: dict[str, NodeConfig] = {}
+nodes["hex_flow_tick"] = NodeConfig(
+    name="hex_flow_tick",
+    run_cmd="hex-flow-tick",
+    build_cmd="pip install hex_flow_core",
+    required=True,
+    hidden=True,
+    remap_dict={
+        "tick": "tick",
+    },
+)
 
 for i in range(8):
     node_name = f"test_pub_cmd_{i}"
@@ -29,6 +39,7 @@ for i in range(8):
         required=True,
         hidden=True,
         remap_dict={
+            "tick": "tick",
             "test/cmd": "test/cmd",
         },
         env_dict={
@@ -46,6 +57,7 @@ for i in range(6):
         required=True,
         hidden=True,
         remap_dict={
+            "tick": "tick",
             "test/img": "test/img",
         },
         env_dict={

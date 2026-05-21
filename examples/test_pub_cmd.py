@@ -8,7 +8,6 @@
 
 import time, traceback
 import numpy as np
-from hex_util_runtime import HexRate
 from hex_util_runtime import get_env_bool
 from hex_flow_core import NodeCallback
 
@@ -25,11 +24,16 @@ def main():
 
     cnt = 0
     start = time.perf_counter()
-    rate = HexRate(1000)
+    pub_intv_ns = int(1e9 / 1000)
+    last_pub_ts_ns = -1
 
     try:
         while True:
-            rate.sleep()
+            time.sleep(1e-5)
+            if node.cur_ts_ns - last_pub_ts_ns < pub_intv_ns:
+                continue
+            last_pub_ts_ns = node.cur_ts_ns
+
             node.pub("test/cmd", data.tobytes())
 
             cnt += 1

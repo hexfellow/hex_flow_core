@@ -19,6 +19,7 @@ dependencies = [
   "eclipse-zenoh>=1.9.0",
   "envlog==1.0.0",
   "hex_util_runtime>=0.0.0,<0.1.0",
+  "hex_util_msg>=0.0.0,<0.1.0",
   "pyyaml>=6.0",
 ]
 classifiers = [
@@ -33,6 +34,8 @@ classifiers = [
   "Operating System :: POSIX :: Linux",
 ]
 
+[project.scripts]
+hex-flow-tick = "hex_flow_core.main_tick:main"
 
 [project.urls]
 Homepage = "https://github.com/hexfellow/hex_flow_core"
