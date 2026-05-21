@@ -14,6 +14,8 @@ from collections import deque
 from hex_util_runtime import deque_helper
 from hex_util_msg.builder_basic import parse_hex_ts_ns
 
+JITTER_NS = 250_000
+
 
 class NodeCallback:
 
@@ -33,7 +35,7 @@ class NodeCallback:
         self.__working = False
 
         self.__sub_tick = sub_tick
-        self.cur_ts_ns = 0
+        self.__tick_dq: deque = deque(maxlen=1000)
 
     def _remap(self, topic: str) -> str:
         return self.__remap.get(topic, topic)
@@ -62,7 +64,21 @@ class NodeCallback:
 
     def __tick_listener(self, sample):
         msg = parse_hex_ts_ns(sample.payload.to_bytes())
-        self.cur_ts_ns = msg["ts_ns"]
+        self.__tick_dq.append(msg["ts_ns"])
+
+    def get_tick(self, latest: bool = False) -> Optional[int]:
+        if not self.__sub_tick:
+            print("This node does not support tick subscriber")
+            return None
+        return deque_helper(self.__tick_dq, latest=latest)
+
+    @staticmethod
+    def tick_trig(trig_ts: int, cur_tick: int, intv_ns: int) -> [bool, int]:
+        jitter_trig_ts = trig_ts - JITTER_NS
+        if jitter_trig_ts < cur_tick:
+            add_num = (cur_tick - jitter_trig_ts) // intv_ns + 1
+            return True, trig_ts + add_num * intv_ns
+        return False, trig_ts
 
     def stop(self):
         if not self.__working:

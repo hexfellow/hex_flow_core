@@ -28,6 +28,10 @@ nodes["hex_flow_tick"] = NodeConfig(
     remap_dict={
         "tick": "tick",
     },
+    env_dict={
+        "RUST_LOG": "info",
+        "PRINT_LOG": "false",
+    },
 )
 
 for i in range(8):
