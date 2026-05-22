@@ -8,21 +8,36 @@
 
 import time, traceback
 import numpy as np
-from hex_util_runtime import ns_now
+from hex_util_runtime import HexRate
 from hex_util_runtime import get_env_bool
 from hex_flow_core import NodeCallback
 
 
-def main():
-    log_flag = get_env_bool("PRINT_LOG")
-    node = NodeCallback("test_pub_cmd")
-    node.start()
-    node.create_pub("test/cmd")
+def real_main(log_flag: bool, node: NodeCallback, data: np.ndarray):
+    cnt = 0
+    start = time.perf_counter()
+    rate = HexRate(1000)
 
-    data = np.random.randint(0, 1000000, size=10240, dtype=np.uint64)
-    if log_flag:
-        node.info("publishing to test/cmd at ~1000 Hz")
+    try:
+        while True:
+            rate.sleep()
+            node.pub("test/cmd", data.tobytes())
 
+            cnt += 1
+            if cnt % 1000 == 0:
+                elapsed = time.perf_counter() - start
+                if log_flag:
+                    node.info(
+                        f"sent {cnt} commands ({cnt / elapsed:.1f} cmd/s)")
+    except KeyboardInterrupt:
+        pass
+    except Exception:
+        traceback.print_exc()
+    finally:
+        node.stop()
+
+
+def sim_main(log_flag: bool, node: NodeCallback, data: np.ndarray):
     cnt = 0
     start_ts_ns = None
     rate = 1000
@@ -55,6 +70,23 @@ def main():
         traceback.print_exc()
     finally:
         node.stop()
+
+
+def main():
+    log_flag = get_env_bool("PRINT_LOG")
+    sim_flag = get_env_bool("SIM_TICK")
+    node = NodeCallback("test_pub_cmd")
+    node.start()
+    node.create_pub("test/cmd")
+
+    data = np.random.randint(0, 1000000, size=10240, dtype=np.uint64)
+    if log_flag:
+        node.info("publishing to test/cmd at ~1000 Hz")
+
+    if sim_flag:
+        sim_main(log_flag, node, data)
+    else:
+        real_main(log_flag, node, data)
 
 
 if __name__ == "__main__":

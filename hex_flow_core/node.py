@@ -6,11 +6,13 @@
 # Date  : 2026-04-22
 ################################################################
 
-import os, json
-import envlog, logging
+import os, json, envlog, logging
+import threading
 import zenoh
 from typing import Callable, Optional
 from collections import deque
+from hex_util_runtime import HexRate, ns_now
+from hex_util_runtime import get_env_bool
 from hex_util_runtime import deque_helper
 from hex_util_msg.builder_basic import parse_hex_ts_ns
 
@@ -19,7 +21,7 @@ JITTER_NS = 250_000
 
 class NodeCallback:
 
-    def __init__(self, name: str = "unknown", sub_tick: bool = True):
+    def __init__(self, name: str = "unknown"):
         self.__name = os.getenv("HEX_FLOW_NODE_NAME", name)
         self.__remap = json.loads(os.getenv("HEX_FLOW_REMAP", "{}"))
 
@@ -34,7 +36,7 @@ class NodeCallback:
         self.__subs: list = []
         self.__working = False
 
-        self.__sub_tick = sub_tick
+        self.__sim_tick = get_env_bool("SIM_TICK")
         self.__tick_dq: deque = deque(maxlen=1000)
 
     def _remap(self, topic: str) -> str:
@@ -55,7 +57,7 @@ class NodeCallback:
         self.__working = True
         self.info(f"node '{self.__name}' started")
 
-        if self.__sub_tick:
+        if self.__sim_tick:
             # init tick subscriber
             tick_topic = self._remap("tick")
             sub = self.__session.declare_subscriber(tick_topic,
@@ -66,7 +68,7 @@ class NodeCallback:
         self.__tick_dq.append(sample.payload)
 
     def get_tick(self, latest: bool = False) -> Optional[int]:
-        if not self.__sub_tick:
+        if not self.__sim_tick:
             print("This node does not support tick subscriber")
             return None
         sample = deque_helper(self.__tick_dq, latest=latest)

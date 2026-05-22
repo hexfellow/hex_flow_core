@@ -15,7 +15,7 @@ from hex_flow_core import NodeCallback
 
 def main():
     log_flag = get_env_bool("PRINT_LOG")
-    node = NodeCallback("hex_flow_tick", sub_tick=False)
+    node = NodeCallback("hex_flow_tick")
     node.start()
     node.create_pub("tick")
 
