@@ -63,14 +63,17 @@ class NodeCallback:
             self.__subs.append(sub)
 
     def __tick_listener(self, sample):
-        msg = parse_hex_ts_ns(sample.payload.to_bytes())
-        self.__tick_dq.append(msg["ts_ns"])
+        self.__tick_dq.append(sample.payload)
 
     def get_tick(self, latest: bool = False) -> Optional[int]:
         if not self.__sub_tick:
             print("This node does not support tick subscriber")
             return None
-        return deque_helper(self.__tick_dq, latest=latest)
+        sample = deque_helper(self.__tick_dq, latest=latest)
+        if sample is None:
+            return None
+        msg = parse_hex_ts_ns(sample.to_bytes())
+        return msg["ts_ns"]
 
     @staticmethod
     def tick_trig(trig_ts: int, cur_tick: int, intv_ns: int) -> [bool, int]:
